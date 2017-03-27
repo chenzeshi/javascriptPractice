@@ -1,0 +1,148 @@
+﻿<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>无标题文档</title>
+    <style>
+*{margin: 0;padding: 0}
+
+.box {width: 200px;height: 200px;position: absolute;top: 100px;left: 100px;}
+/*四边*/
+.box .t {width: 100%;height: 10px;position: absolute;top: 0;left: 0;background: #666;z-index: 1;cursor: row-resize;}
+.box .l {width: 10px;height: 100%; position: absolute;top: 0;left: 0;background: #666;z-index: 1;cursor: col-resize;}
+.box .r {width: 10px;height: 100%;position: absolute;top: 0;right: 0;background: #666;z-index: 1;cursor: col-resize;}   
+.box .b {width: 100%;height: 10px;position: absolute;bottom: 0;left: 0;background: #666;z-index: 1;cursor: row-resize;}
+/*四角*/
+.box .tl {width: 20px;height: 20px;position: absolute;top: -5px;left: -5px;background: #CCC;z-index: 2;cursor: nwse-resize}
+.box .bl {width: 20px;height: 20px;position: absolute;bottom: -5px;left: -5px;background: #CCC;z-index: 2;cursor: sw-resiz}    
+.box .tr {width: 20px;height: 20px;position: absolute;top: -5px;right: -5px;background: #CCC;z-index: 2;cursor: sw-resize}    
+.box .br {width: 20px;height: 20px; position: absolute;bottom: -5px;right: -5px;background: #CCC; z-index: 2;
+cursor: nwse-resize}
+/*图片*/
+img {width: 100%;height: 100%;}
+/*new add*/
+body{position:relative;width:100%;height:100%;}
+.box .span-list{width:20px;height:20px;z-index:5;background:#666;position:absolute;cursor: nwse-resize;}
+.span-list:nth-child(1){top:-5px;left:-5px;}
+.span-list:nth-child(2){top:-5px;right:-5px;cursor:nesw-resize;}
+.span-list:nth-child(3){bottom:-5px;left:-5px;cursor:nesw-resize;}
+.span-list:nth-child(4){bottom:-5px;right:-5px;}
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <span class="span-list"></span>
+        <span class="span-list"></span>
+        <span class="span-list"></span>
+        <span class="span-list"></span>
+        <span class="r"></span>
+        <span class="l"></span>
+        <span class="t"></span>
+        <span class="b"></span>
+        <img src="02.jpg">
+    </div>
+    <script>
+    window.onload = function() {
+        var oDiv = document.getElementsByTagName('div')[0];
+        var aSpan = oDiv.getElementsByTagName('span');
+        for (var i = 0; i < aSpan.length; i++) {
+        	aSpan[i].index = i;
+            dragFn(aSpan[i]);
+        };
+
+        function dragFn(obj) {
+            obj.onmousedown = function(ev) {
+                var oEv = ev || event;
+
+                var oldWidth = oDiv.offsetWidth; // 宽度
+                var oldHeight = oDiv.offsetHeight; //高度
+                var oldX = oEv.clientX; //鼠标X轴
+                var oldY = oEv.clientY; //鼠标Y轴
+                var oldLeft = oDiv.offsetLeft; //left 
+                var oldTop = oDiv.offsetTop;
+
+                var _index = this.index;
+                document.onmousemove = function(ev) {
+                //	console.log(_index)
+                    var oEv = ev || event;
+                    var offsetX = oEv.clientX - oldX;
+                    var offsetY = oEv.clientY - oldY;
+                    console.log(offsetX,offsetY);
+                    if(_index == 0 || _index == 2 || _index == 5){
+                    	oDiv.style.width = oldWidth - offsetX + 'px';
+                    	oDiv.style.left = oldLeft + offsetX + 'px';
+                    }else if(_index == 1 || _index == 3 || _index == 4){
+                    	oDiv.style.width = oldWidth + offsetX + 'px';
+                    	oDiv.style.right = oldLeft + offsetX + 'px';
+                    }
+
+                    if(_index == 0 || _index == 1 || _index == 6){
+                    	oDiv.style.height = oldHeight - offsetY + 'px';
+                    	oDiv.style.top = oldTop + offsetY + 'px';
+                    }else if(_index == 2 || _index == 3 || _index == 7){
+                    	oDiv.style.height = oldHeight + offsetY + 'px';
+                    	oDiv.style.bottom = oldTop + offsetY + 'px';
+                    }
+                    /*if(_index == 6){
+                        oDiv.style.height = oldHeight - offsetY + 'px';
+                    }else if(_index == 5){
+                        oDiv.style.left = oldLeft - offsetX + 'px';
+                    }*/
+                    //tl
+                /*    if (obj.className == 'tl') {
+                        oDiv.style.width = oldWidth - (oEv.clientX - oldX) + 'px';
+                        oDiv.style.left = oldLeft + (oEv.clientX - oldX) + 'px';
+                        oDiv.style.height = oldHeight - (oEv.clientY - oldY) + 'px';
+                        oDiv.style.top = oldTop + (oEv.clientY - oldY) + 'px';
+                    };
+                    if (obj.className == 'bl') {
+                        oDiv.style.width = oldWidth - (oEv.clientX - oldX) + 'px';
+                        oDiv.style.left = oldLeft + (oEv.clientX - oldX) + 'px';
+                        oDiv.style.height = oldHeight + (oEv.clientY - oldY) + 'px';
+                        oDiv.style.bottom = oldTop + (oEv.clientY - oldY) + 'px';
+                    };
+                    if (obj.className == 'tr') {
+                        oDiv.style.width = oldWidth + (oEv.clientX - oldX) + 'px';
+                        oDiv.style.right = oldLeft + (oEv.clientX - oldX) + 'px';
+                        oDiv.style.height = oldHeight - (oEv.clientY - oldY) + 'px';
+                        oDiv.style.top = oldTop + (oEv.clientY - oldY) + 'px';
+                    };
+                    if (obj.className == 'br') {
+                        oDiv.style.width = oldWidth + (oEv.clientX - oldX) + 'px';
+                        oDiv.style.right = oldLeft + (oEv.clientX - oldX) + 'px';
+                        oDiv.style.height = oldHeight + (oEv.clientY - oldY) + 'px';
+                        oDiv.style.bottom = oldTop + (oEv.clientY - oldY) + 'px';
+                    };
+                    //边框
+                    if (obj.className == 't') {
+                        oDiv.style.height = oldHeight - (oEv.clientY - oldY) + 'px';
+                        oDiv.style.top = oldTop + (oEv.clientY - oldY) + 'px';
+                    };
+                    if (obj.className == 'r') {
+                        oDiv.style.width = oldWidth + (oEv.clientX - oldX) + 'px';
+                        oDiv.style.right = oldLeft - (oEv.clientX - oldX) + 'px';
+                    };
+                    if (obj.className == 'b') {
+                        oDiv.style.height = oldHeight + (oEv.clientY - oldY) + 'px';
+                        oDiv.style.bottom = oldTop + (oEv.clientY - oldY) + 'px';
+                    };
+                    if (obj.className == 'l') {
+                        oDiv.style.width = oldWidth - (oEv.clientX - oldX) + 'px';
+                        oDiv.style.left = oldLeft + (oEv.clientX - oldX) + 'px';
+                    };*/
+                };
+
+                document.onmouseup = function() {
+                    document.onmousemove = null;
+                };
+                return false;
+            };
+        };
+
+    };
+    </script>
+</body>
+
+</html>

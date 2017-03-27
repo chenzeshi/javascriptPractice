@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>放大镜</title>
+<style>
+*{ margin:0; padding:0}
+#div1 {position:relative;width:200px; height:275px;cursor:move;overflow:hidden;top:100px; left:100px}
+#div1 .Img{ width:100%; height:100%;}
+#div1 span {width:100px; height:100px; background:yellow; position:absolute;left:0px; top:0px; filter:alpha(opacity:30); border:1px solid black; display:none;}
+#div2 {width:100px; height:100px;overflow:hidden; position:absolute; display:none}
+#bigImg {position:absolute;}
+</style>
+<script type="text/javascript">
+window.onload=function (){
+	var oDiv1=document.getElementById('div1');
+	var oDiv2=document.getElementById('div2');
+	var bigImg=document.getElementById('bigImg');
+	var aInput=document.getElementsByTagName('input');
+	var oSpan=oDiv1.getElementsByTagName('span')[0];
+	
+	
+	oDiv1.onmousemove=function(ev){
+		oSpan.style.display=oDiv2.style.display='block';
+		
+		var oEv=ev||event;
+		
+		//获取滚动条  chrome不识别 documentElement.scrollTop
+		var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+		
+		//鼠标在span的中心位置
+		var l=oEv.clientX-oDiv1.offsetLeft-oSpan.offsetWidth/2; 
+		var t=oEv.clientY+scrollTop-oDiv1.offsetTop-oSpan.offsetHeight/2;
+		
+		
+		//限制范围 
+		if(l<0)l=0;
+		if(l>=oDiv1.offsetWidth-oSpan.offsetWidth){
+			l=oDiv1.offsetWidth-oSpan.offsetWidth;
+		}
+
+		if(t<0)t=0;
+		if(t>=oDiv1.offsetHeight-oSpan.offsetHeight){
+			t=oDiv1.offsetHeight-oSpan.offsetHeight;
+		}
+		oSpan.style.left=l+'px';
+		oSpan.style.top=t+'px';	
+		
+		
+		var l_rate=l / (oDiv1.offsetWidth-oSpan.offsetWidth);
+		var t_rate=t / (oDiv1.offsetHeight-oSpan.offsetHeight);
+		
+		
+		bigImg.style.left= (oDiv2.offsetWidth-bigImg.offsetWidth)*l_rate +'px'; //外box 减 内部大图片，为负值
+		bigImg.style.top= (oDiv2.offsetHeight-bigImg.offsetHeight)*t_rate +'px';
+		
+	};
+	
+	oDiv1.onmouseout=function(){
+		oSpan.style.display=oDiv2.style.display='none';	
+	};
+	
+};
+
+
+</script>
+</head>
+
+<body>
+<div id="div1">
+    <img src="images/1.jpg" class="Img" />
+    <span>
+    <div id="div2">
+    <img id="bigImg" src="images/1.jpg" />
+	</div>
+</span>
+</div>
+
+
+
+
+</body>
+</html>

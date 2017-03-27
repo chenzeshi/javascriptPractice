@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style type="text/css">
+*{margin:0;padding:0}
+ul{list-style:none;}
+a{text-decoration:none;}
+li{border-bottom: 3px solid #eee; padding:10px;}
+button{width:100px;height:50px;font-size: 30px; margin-bottom:10px}
+div{width:300px;font-size: 30px;height:100px;background-color: #999; display:none}
+.subA{ background:#ddd}
+.subB{ background:#ccc}
+</style>
+<script>
+window.onload=function(){
+	//点击一个按钮显示其内容，并隐藏其他所有按钮的内容，再次点击关闭
+	var aBtn=document.getElementsByTagName("button");
+	var aDiv=document.getElementsByTagName("div");
+	for(var i=0;i<aBtn.length;i++){
+		aBtn[i].index=i;
+		aBtn[i].color=true;
+			aBtn[i].onclick=function(){
+				//判断自己开关			
+					if(this.color==true){
+						for(var j=0;j<aBtn.length;j++){
+							aDiv[j].style.display="none";
+							aBtn[j].color=true;
+						};
+						aDiv[this.index].style.display="block";
+						this.color=false;
+					}else{
+						aDiv[this.index].style.display="none";
+						this.color=true;	
+					};	
+			};
+	};
+};	
+</script>
+</head>
+<body>
+	<ul id='box'>
+		<li >
+			<button type='button'>A</button>
+			<button type='button'>B</button>
+			<div class="subA">a</div>
+			<div class="subB">b</div>
+		</li>
+		<li >
+			<button type='button'>A</button>
+			<button type='button'>B</button>
+			<div class="subA">a</div>
+			<div class="subB">b</div>
+		</li>
+		<li >
+			<button type='button'>A</button>
+			<button type='button'>B</button>
+			<div class="subA">a</div>
+			<div class="subB">b</div>
+		</li>
+	</ul>
+
+</body>
+</html>
